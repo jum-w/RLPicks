@@ -7,7 +7,7 @@ module.exports = {
     "./pages/components/Navbar.jsx",
     "./pages/components/Feature.jsx",
     "./pages/_document.js",
-    "./pages/verification.jsx",
+    "./pages/home.jsx",
   ],
   theme: {
     extend: {
