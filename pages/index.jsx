@@ -22,7 +22,7 @@ export default function LandingPage() {
   const start = () => {
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn == true) {
-        Router.push("/home");
+        Router.push("/picks");
       } else {
         Router.push("/register");
       }
@@ -32,7 +32,7 @@ export default function LandingPage() {
   const login = () => {
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn == true) {
-        Router.push("/home");
+        Router.push("/picks");
       } else {
         Router.push("/login");
       }

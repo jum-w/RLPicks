@@ -109,24 +109,39 @@ export default function Register({ loggedIn }) {
           </form>
         </div>
         {errMsg != null && (
-          <div className="mt-5 bg-red-600 p-4 rounded-lg text-white text-center justify-center flex">
-            <FontAwesomeIcon icon={faXmarkCircle} className="text-2xl mr-2" />
-            {errMsg}
-          </div>
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            <div className="mt-5 bg-red-600 p-4 rounded-lg text-white text-center justify-center flex">
+              <FontAwesomeIcon icon={faXmarkCircle} className="text-2xl mr-2" />
+              {errMsg}
+            </div>
+          </motion.div>
         )}
         {success == true && (
-          <div className="mt-5 bg-green-600 p-4 rounded-lg text-white text-center justify-center flex flex-col">
-            <div className="flex">
-              <FontAwesomeIcon icon={faCircleCheck} className="text-2xl mr-2" />
-              Success! Please&nbsp;
-              <a
-                href="/login"
-                className="text-blue-600 underline hover:text-blue-700"
-              >
-                login.
-              </a>
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            <div className="mt-5 bg-green-600 p-4 rounded-lg text-white text-center justify-center flex flex-col">
+              <div className="flex">
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  className="text-2xl mr-2"
+                />
+                Success! Please&nbsp;
+                <a
+                  href="/login"
+                  className="text-blue-600 underline hover:text-blue-700"
+                >
+                  login.
+                </a>
+              </div>
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </motion.div>

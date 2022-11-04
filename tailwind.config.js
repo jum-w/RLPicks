@@ -8,6 +8,10 @@ module.exports = {
     "./pages/components/Feature.jsx",
     "./pages/_document.js",
     "./pages/home.jsx",
+    "./pages/components/Layout.jsx",
+    "./pages/leaderboard.jsx",
+    "./pages/players.jsx",
+    "./pages/picks.jsx",
   ],
   theme: {
     extend: {

@@ -18,7 +18,7 @@ export default function Home() {
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn == true) {
         setLoggedIn(true);
-        Router.push("/home");
+        Router.push("/picks");
       } else setLoading(false);
     });
   }, []);
@@ -38,7 +38,7 @@ export default function Home() {
     }).then((response) => {
       if (response.data.message == "Login complete.") {
         setErrMsg(null);
-        Router.push("/home");
+        Router.push("/picks");
       } else {
         setErrMsg(response.data.message);
         console.log(response.data.message);
