@@ -12,6 +12,7 @@ module.exports = {
     "./pages/leaderboard.jsx",
     "./pages/players.jsx",
     "./pages/picks.jsx",
+    "./pages/components/Team.jsx",
   ],
   theme: {
     extend: {

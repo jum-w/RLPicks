@@ -40,10 +40,10 @@ const Layout = ({ children }) => {
               route("/leaderboard");
             }}
             className="p-2 px-4 rounded-lg text-start
-          text-white hover:bg-blue-600 duration-300 text-center text-sm sm:text-base sm:w-52 m-1"
+          text-white hover:bg-blue-600 duration-300 text-center text-xs sm:text-base sm:w-52 m-1"
           >
             <FontAwesomeIcon icon={faTrophy} className="mr-2" />
-            Scores
+            Leaderboard
           </button>
           <button
             onClick={() => {

@@ -33,7 +33,7 @@ const Leaderboard = () => {
     if (points > last) {
       setMessage("Congratulations, you are top 10!");
     } else {
-      setMessage("Keep going, you are almost there!");
+      setMessage("Keep going");
     }
   };
 
