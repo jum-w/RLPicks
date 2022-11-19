@@ -10,14 +10,12 @@ const Leaderboard = () => {
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
   const [points, setPoints] = useState(0);
-  const [last, setLast] = useState(0);
   const [message, setMessage] = useState("");
 
   const getData = () => {
     Axios.get("http://localhost:3001/names").then((response) => {
       if (response) {
         setScores(response.data);
-        setLast(response.data[9].points);
       }
     });
 
@@ -29,17 +27,8 @@ const Leaderboard = () => {
     });
   };
 
-  const diff = () => {
-    if (points > last) {
-      setMessage("Congratulations, you are top 10!");
-    } else {
-      setMessage("Keep going");
-    }
-  };
-
   useEffect(() => {
     getData();
-    diff();
     setLoading(false);
   }, []);
 
@@ -54,7 +43,6 @@ const Leaderboard = () => {
           <div className="text-center my-12">
             <h1 className="text-4xl font-bold">The Scores</h1>
             <div className="mt-4">You have {points} points.</div>
-            <h2 className="mt-2">{message}</h2>
           </div>
         </motion.div>
         <div className=""></div>

@@ -1,285 +1,337 @@
 import Layout from "./components/Layout";
 import { useState, useEffect } from "react";
+import Axios from "axios";
+import Teams from "./components/Teams";
+import Picked from "./components/Picked";
+import Popup from "./components/Popup";
+import { motion } from "framer-motion";
 
 const Picks = () => {
+  Axios.defaults.withCredentials = true;
+
   const [w1, setW1] = useState("");
   const [w2, setW2] = useState("");
   const [w3, setW3] = useState("");
   const [w4, setW4] = useState("");
   const [w5, setW5] = useState("");
   const [w6, setW6] = useState("");
+
   const [winner, setWinner] = useState("");
+  const [name, setName] = useState("");
+  const [picked, setPicked] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-  const [s1, setS1] = useState(0);
-  const [s2, setS2] = useState(0);
-  const [s3, setS3] = useState(0);
-  const [s4, setS4] = useState(0);
-  const [s5, setS5] = useState(0);
-  const [s6, setS6] = useState(0);
-  const [s7, setS7] = useState(0);
-  const [s8, setS8] = useState(0);
-  const [s9, setS9] = useState(0);
-  const [s10, setS10] = useState(0);
-  const [s11, setS11] = useState(0);
-  const [s12, setS12] = useState(0);
-  const [s13, setS13] = useState(0);
-  const [s14, setS14] = useState(0);
-
-  const t1 = "1",
-    t2 = "2",
-    t3 = "3",
-    t4 = "4",
-    t5 = "5",
-    t6 = "6",
-    t7 = "7",
-    t8 = "8";
-
-  const checkG1 = () => {
-    if (s1 > s2 && s1 == 4 && s2 >= 0 && s2 < 4) {
-      setW1(t1);
-    } else if (s2 > s1 && s2 == 4 && s1 >= 0 && s1 < 4) {
-      setW1(t2);
-    } else {
-      setW1("");
-    }
-  };
-
-  const checkG2 = () => {
-    if (s3 > s4 && s3 == 4 && s4 >= 0 && s4 < 4) {
-      setW2(t3);
-    } else if (s4 > s3 && s4 == 4 && s3 >= 0 && s3 < 4) {
-      setW2(t4);
-    } else {
-      setW2("");
-    }
-  };
-
-  const checkG3 = () => {
-    if (s5 > s6 && s5 == 4 && s6 >= 0 && s6 < 4) {
-      setW3(t5);
-    } else if (s6 > s5 && s6 == 4 && s5 >= 0 && s5 < 4) {
-      setW3(t6);
-    } else {
-      setW3("");
-    }
-  };
-
-  const checkG4 = () => {
-    if (s7 > s8 && s7 == 4 && s8 >= 0 && s8 < 4) {
-      setW4(t7);
-    } else if (s8 > s7 && s8 == 4 && s7 >= 0 && s7 < 4) {
-      setW4(t8);
-    } else {
-      setW4("");
-    }
-  };
-
-  const checkG5 = () => {
-    if (s9 > s10 && s9 == 4 && s10 >= 0 && s10 < 4) {
-      setW5(w1);
-    } else if (s10 > s9 && s10 == 4 && s9 >= 0 && s9 < 4) {
-      setW5(w2);
-    } else {
-      setW5("");
-    }
-  };
-
-  const checkG6 = () => {
-    if (s11 > s12 && s11 == 4 && s12 >= 0 && s12 < 4) {
-      setW6(w3);
-    } else if (s12 > s11 && s12 == 4 && s11 >= 0 && s11 < 4) {
-      setW6(w4);
-    } else {
-      setW6("");
-    }
-  };
-
-  const checkWinner = () => {
-    if (s13 > s14 && s13 == 4 && s14 >= 0 && s14 < 4) {
-      setWinner(w5);
-    } else if (s14 > s13 && s14 == 4 && s13 >= 0 && s13 < 4) {
-      setWinner(w6);
-    } else {
-      setWinner("");
-    }
-  };
-
-  const checkGames = () => {
-    checkG1();
-    checkG2();
-    checkG3();
-    checkG4();
-    checkG5();
-    checkG6();
-    checkWinner();
-  };
+  const [t1, setT1] = useState("");
+  const [t2, setT2] = useState("");
+  const [t3, setT3] = useState("");
+  const [t4, setT4] = useState("");
+  const [t5, setT5] = useState("");
+  const [t6, setT6] = useState("");
+  const [t7, setT7] = useState("");
+  const [t8, setT8] = useState("");
 
   useEffect(() => {
-    checkGames();
+    Axios.get("http://localhost:3001/login").then((response) => {
+      if (response.data.loggedIn == true) {
+        setName(response.data.user[0].username);
+      }
+    });
+
+    Axios.get("http://localhost:3001/teams").then((response) => {
+      if (response.data[0] !== undefined) {
+        setT1(response.data[0].team1);
+        setT2(response.data[0].team2);
+        setT3(response.data[0].team3);
+        setT4(response.data[0].team4);
+        setT5(response.data[0].team5);
+        setT6(response.data[0].team6);
+        setT7(response.data[0].team7);
+        setT8(response.data[0].team8);
+      }
+    });
+  }, []);
+
+  Axios.post("http://localhost:3001/check", {
+    username: name,
+  }).then((response) => {
+    if (response.data[0] != undefined && response.data[0].winner1 != null) {
+      setPicked(true);
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
   });
 
-  return (
-    <div className="min-h-screen ml-2 sm:ml-32 flex justify-center">
-      <form>
-        <div className="flex lg:flex-row flex-col h-max items-center">
-          <div className="text-lg w-80 justify-between flex flex-col p-5">
-            <h1 className="text-center">Quarter finals</h1>
-            {/* Quarter Finals */}
-            <div className="flex justify-between bg-lighter2 rounded-md">
-              <label className="text-center w-full p-2">{t1}</label>
-              <input
-                maxLength={1}
-                onChange={(e) => {
-                  setS1(e.target.value);
-                }}
-                className="bg-blue-800 w-11 text-center p-2 block focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
+  const submitScores = (e) => {
+    e.preventDefault();
+    if (!winner.length == 0) {
+      Axios.post("http://localhost:3001/results", {
+        username: name,
+        score1: w1,
+        score2: w2,
+        score3: w3,
+        score4: w4,
+        score5: w5,
+        score6: w6,
+        score7: winner,
+      }).then((response) => {
+        if (response) {
+          setPicked(true);
+        }
+      });
+    } else {
+      setError(true);
+    }
+  };
+
+  const close = () => {
+    setVisible(false);
+  };
+
+  if (picked == false && loading == false)
+    return (
+      <div className="mx-auto">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1 }}
+        >
+          <div className="text-center my-12">
+            <h1 className="text-4xl font-bold">The Teams</h1>
+
+            <div className="mt-4">
+              Each correct pick is 5 points, regardless of opponent, you will
+              still get 5 points if your chosen team wins.
             </div>
-            <div className="flex justify-between bg-lighter2 rounded-md mb-8">
-              <label className="text-center w-full p-2">{t2}</label>
-              <input
-                onChange={(e) => {
-                  setS2(e.target.value);
-                }}
-                maxLength={1}
-                className="bg-orange-700 w-11 text-center p-2 focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
+            <div className="mt-2">
+              A correct Grand Finals winner will result in 10 points.
             </div>
-            <div className="flex justify-between bg-lighter2 rounded-md">
-              <label className="text-center w-full p-2">{t3}</label>
-              <input
-                maxLength={1}
-                onChange={(e) => {
-                  setS3(e.target.value);
-                }}
-                className="bg-blue-800 w-11 text-center p-2 block focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
-            </div>
-            <div className="flex justify-between bg-lighter2 rounded-md mb-8">
-              <label className="text-center w-full p-2">{t4}</label>
-              <input
-                onChange={(e) => {
-                  setS4(e.target.value);
-                }}
-                maxLength={1}
-                className="bg-orange-700 w-11 text-center p-2 focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
-            </div>
-            <div className="flex justify-between bg-lighter2 rounded-md">
-              <label className="text-center w-full p-2">{t5}</label>
-              <input
-                maxLength={1}
-                onChange={(e) => {
-                  setS5(e.target.value);
-                }}
-                className="bg-blue-800 w-11 text-center p-2 block focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
-            </div>
-            <div className="flex justify-between bg-lighter2 rounded-md mb-8">
-              <label className="text-center w-full p-2">{t6}</label>
-              <input
-                onChange={(e) => {
-                  setS6(e.target.value);
-                }}
-                maxLength={1}
-                className="bg-orange-700 w-11 text-center p-2 focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
-            </div>
-            <div className="flex justify-between bg-lighter2 rounded-md">
-              <label className="text-center w-full p-2">{t7}</label>
-              <input
-                maxLength={1}
-                onChange={(e) => {
-                  setS7(e.target.value);
-                }}
-                className="bg-blue-800 w-11 text-center p-2 block focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
-            </div>
-            <div className="flex justify-between bg-lighter2 rounded-md mb-8">
-              <label className="text-center w-full p-2">{t8}</label>
-              <input
-                onChange={(e) => {
-                  setS8(e.target.value);
-                }}
-                maxLength={1}
-                className="bg-orange-700 w-11 text-center p-2 focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
-            </div>
+            <div className="mt-2">Good luck!</div>
           </div>
-          <div className="text-lg w-80 justify-between flex flex-col p-5">
-            <h1 className="text-center">Semi Finals</h1>
-            {/* Semi Finals */}
-            <div className="flex justify-between bg-lighter2 rounded-md">
-              <label className="text-center w-full p-2">{w1}</label>
-              <input
-                maxLength={1}
-                onChange={(e) => {
-                  setS9(e.target.value);
-                }}
-                className="bg-blue-800 w-11 text-center p-2 block focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
+        </motion.div>
+        <div className="flex justify-center mx-auto">
+          <div className="flex 2xl:flex-row flex-col h-max items-center">
+            <div className="text-lg w-80 justify-between flex flex-col p-5">
+              <motion.div
+                initial={{ opacity: 0, x: -150 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2, duration: 0.3 }}
+              >
+                <h1 className="text-center">Quarter finals</h1>
+                {/* Quarter Finals */}
+                <div className="mb-8">
+                  <div
+                    onClick={() => {
+                      setW1(t1);
+                    }}
+                  >
+                    <Teams t1={t1} />
+                  </div>
+                  <div
+                    onClick={() => {
+                      setW1(t2);
+                    }}
+                  >
+                    <Teams t1={t2} />
+                  </div>
+                </div>
+                <div className="mb-8">
+                  <div
+                    onClick={() => {
+                      setW2(t3);
+                    }}
+                  >
+                    <Teams t1={t3} />
+                  </div>
+                  <div
+                    onClick={() => {
+                      setW2(t4);
+                    }}
+                  >
+                    <Teams t1={t4} />
+                  </div>
+                </div>
+                <div className="mb-8">
+                  <div
+                    onClick={() => {
+                      setW3(t5);
+                    }}
+                  >
+                    <Teams t1={t5} />
+                  </div>
+                  <div
+                    onClick={() => {
+                      setW3(t6);
+                    }}
+                  >
+                    <Teams t1={t6} />
+                  </div>
+                </div>
+                <div className="">
+                  <div
+                    onClick={() => {
+                      setW4(t7);
+                    }}
+                  >
+                    <Teams t1={t7} />
+                  </div>
+                  <div
+                    onClick={() => {
+                      setW4(t8);
+                    }}
+                  >
+                    <Teams t1={t8} />
+                  </div>
+                </div>
+              </motion.div>
             </div>
-            <div className="flex justify-between bg-lighter2 rounded-md mb-4 lg:mb-10">
-              <label className="text-center w-full p-2">{w2}</label>
-              <input
-                onChange={(e) => {
-                  setS10(e.target.value);
-                }}
-                maxLength={1}
-                className="bg-orange-700 w-11 text-center p-2 focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
+            <div className="text-lg w-80 justify-between flex flex-col p-5">
+              <motion.div
+                initial={{ opacity: 0, x: -150 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.3 }}
+              >
+                <h1 className="text-center">Semi Finals</h1>
+                {/* Semi Finals */}
+                <div className="mb-8">
+                  <div
+                    onClick={() => {
+                      if (winner == w2) {
+                        setWinner("");
+                      }
+                      setW5(w1);
+                    }}
+                  >
+                    <Teams t1={w1} />
+                  </div>
+                  <div
+                    onClick={() => {
+                      if (winner == w1) {
+                        setWinner("");
+                      }
+                      setW5(w2);
+                    }}
+                  >
+                    <Teams t1={w2} />
+                  </div>
+                </div>
+                <div>
+                  <div
+                    onClick={() => {
+                      if (winner == w4) {
+                        setWinner("");
+                      }
+                      setW6(w3);
+                    }}
+                  >
+                    <Teams t1={w3} />
+                  </div>
+                  <div
+                    onClick={() => {
+                      if (winner == w3) {
+                        setWinner("");
+                      }
+                      setW6(w4);
+                    }}
+                  >
+                    <Teams t1={w4} />
+                  </div>
+                </div>
+              </motion.div>
             </div>
-            <div className="flex justify-between bg-lighter2 rounded-md mt-4 lg:mt-10">
-              <label className="text-center w-full p-2">{w3}</label>
-              <input
-                maxLength={1}
-                onChange={(e) => {
-                  setS11(e.target.value);
-                }}
-                className="bg-blue-800 w-11 text-center p-2 block focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
+            <div className="text-lg w-80 justify-between flex flex-col p-5">
+              <motion.div
+                initial={{ opacity: 0, x: -150 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4, duration: 0.3 }}
+              >
+                <h1 className="text-center">Grand Finals</h1>
+                {/* Grand Finals */}
+                <div className="">
+                  <div
+                    onClick={() => {
+                      setWinner(w5);
+                    }}
+                  >
+                    <Teams t1={w5} />
+                  </div>
+                  <div
+                    onClick={() => {
+                      setWinner(w6);
+                    }}
+                  >
+                    <Teams t1={w6} />
+                  </div>
+                </div>
+              </motion.div>
             </div>
-            <div className="flex justify-between bg-lighter2 rounded-md mb-8">
-              <label className="text-center w-full p-2">{w4}</label>
-              <input
-                onChange={(e) => {
-                  setS12(e.target.value);
-                }}
-                maxLength={1}
-                className="bg-orange-700 w-11 text-center p-2 focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
-            </div>
-          </div>
-          <div className="text-lg w-80 justify-between flex flex-col p-5">
-            <h1 className="text-center">Grand Finals</h1>
-            {/* Grand Finals */}
-            <div className="flex justify-between bg-lighter2 rounded-md">
-              <label className="text-center w-full p-2">{w5}</label>
-              <input
-                maxLength={1}
-                onChange={(e) => {
-                  setS13(e.target.value);
-                }}
-                className="bg-blue-800 w-11 text-center p-2 block focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
-            </div>
-            <div className="flex justify-between bg-lighter2 rounded-md mb-8">
-              <label className="text-center w-full p-2">{w6}</label>
-              <input
-                onChange={(e) => {
-                  setS14(e.target.value);
-                }}
-                maxLength={1}
-                className="bg-orange-700 w-11 text-center p-2 focus:border-blue-500 focus:outline-none rounded-r-md"
-              />
+            <div className="text-lg w-80 justify-between flex flex-col p-5">
+              <motion.div
+                initial={{ opacity: 0, x: -150 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5, duration: 0.3 }}
+              >
+                <h1 className="text-center">Your Winner</h1>
+                {/* Winner */}
+                <div>
+                  <div>
+                    <Teams t1={winner} />
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
-        <div className="">{winner}</div>
-        <button>hi</button>
-      </form>
-    </div>
-  );
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <button
+            className="bg-blue-600 rounded-lg p-3 mb-4
+            text-white hover:bg-blue-700 duration-300 w-48 flex justify-center text-center mx-auto mt-8"
+            onClick={() => {
+              if (winner.length == 0) {
+                setError(true);
+              } else {
+                setError(false);
+                setVisible(true);
+              }
+            }}
+          >
+            Confirm Picks
+          </button>
+        </motion.div>
+        {error == true && (
+          <motion.div
+            initial={{ opacity: 0, y: 150 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="mt-8 w-64 mx-auto bg-red-600 p-3 items-center rounded-lg text-white text-center justify-center flex flex-col">
+              <div className="flex">Your picks are invalid! Try again.</div>
+            </div>
+          </motion.div>
+        )}
+        <Popup visible={visible} close={close} submitScores={submitScores} />
+      </div>
+    );
+  else if (loading == false && picked == true)
+    return (
+      <Picked
+        name={name}
+        t1={t1}
+        t2={t2}
+        t3={t3}
+        t4={t4}
+        t5={t5}
+        t6={t6}
+        t7={t7}
+        t8={t8}
+      />
+    );
 };
 
 Picks.getLayout = function getLayout(page) {

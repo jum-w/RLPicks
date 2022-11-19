@@ -102,7 +102,7 @@ export default function LandingPage() {
         transition={{ duration: 1, delay: 1.2 }}
       >
         <button
-          className="bg-blue-600 rounded-lg p-2
+          className="bg-blue-600 rounded-lg p-2 mb-4
             text-white hover:bg-blue-700 duration-300 w-32 flex justify-center text-center mx-auto mt-8"
           onClick={start}
         >
