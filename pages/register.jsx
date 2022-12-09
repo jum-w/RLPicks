@@ -32,7 +32,7 @@ export default function Register({ loggedIn }) {
       setSuccess(false);
       setErrMsg("Password is invalid.");
     } else {
-      Axios.post("http://api.rocketpicks.xyz/create", {
+      Axios.post("https://api.rocketpicks.xyz/create", {
         username: username,
         password: password,
       }).then((response) => {

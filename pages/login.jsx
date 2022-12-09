@@ -21,7 +21,7 @@ export default function Home() {
   Axios.defaults.withCredentials = true;
 
   useEffect(() => {
-    Axios.get("api.rocketpicks.xyz/login").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
       if (response.data.loggedIn == true) {
         setLoggedIn(true);
         Router.push("/picks");
@@ -38,7 +38,7 @@ export default function Home() {
       setErrMsg("Invalid username/password.");
       return;
     }
-    Axios.post("api.rocketpicks.xyz/login", {
+    Axios.post("https://api.rocketpicks.xyz/login", {
       crossDomain: true,
       username: username,
       password: password,

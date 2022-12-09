@@ -34,13 +34,13 @@ const Picks = () => {
   const [t8, setT8] = useState("");
 
   useEffect(() => {
-    Axios.get("http://api.rocketpicks.xyz/login").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
       if (response.data.loggedIn === true) {
         setName(response.data.user[0].username);
       }
     });
 
-    Axios.get("http://api.rocketpicks.xyz/teams").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/teams").then((response) => {
       console.log(response);
       if (response.data[0] !== undefined) {
         setT1(response.data[0].team1);
@@ -58,7 +58,7 @@ const Picks = () => {
     setLoading(false);
   }, []);
 
-  Axios.post("http://api.rocketpicks.xyz/check", {
+  Axios.post("https://api.rocketpicks.xyz/check", {
     username: name,
   }).then((response) => {
     if (!response.data[0] && !response.data[0].winner1) {
@@ -72,7 +72,7 @@ const Picks = () => {
   const submitScores = (e) => {
     e.preventDefault();
     if (winner.length) {
-      Axios.post("http://api.rocketpicks.xyz/results", {
+      Axios.post("https://api.rocketpicks.xyz/results", {
         username: name,
         score1: w1,
         score2: w2,

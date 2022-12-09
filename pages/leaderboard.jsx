@@ -13,13 +13,13 @@ const Leaderboard = () => {
   const [message, setMessage] = useState("");
 
   const getData = () => {
-    Axios.get("http://api.rocketpicks.xyz/names").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/names").then((response) => {
       if (response) {
         setScores(response.data);
       }
     });
 
-    Axios.get("http://api.rocketpicks.xyz/login").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
       if (response.data.loggedIn == true) {
         setName(response.data.user[0].username);
         setPoints(response.data.user[0].points);

@@ -15,7 +15,7 @@ const Picked = ({ name, t1, t2, t3, t4, t5, t6, t7, t8, picked }) => {
   const [w7, setW7] = useState("");
 
   useEffect(() => {
-    Axios.post("http://api.rocketpicks.xyz/teams", {
+    Axios.post("https://api.rocketpicks.xyz/teams", {
       username: name,
     }).then((response) => {
       if (response.data[0] !== undefined) {
