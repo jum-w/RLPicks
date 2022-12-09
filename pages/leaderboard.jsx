@@ -13,13 +13,13 @@ const Leaderboard = () => {
   const [message, setMessage] = useState("");
 
   const getData = () => {
-    Axios.get("http://localhost:3001/names").then((response) => {
+    Axios.get("http://api.rocketpicks.xyz/names").then((response) => {
       if (response) {
         setScores(response.data);
       }
     });
 
-    Axios.get("http://localhost:3001/login").then((response) => {
+    Axios.get("http://api.rocketpicks.xyz/login").then((response) => {
       if (response.data.loggedIn == true) {
         setName(response.data.user[0].username);
         setPoints(response.data.user[0].points);
@@ -34,7 +34,7 @@ const Leaderboard = () => {
 
   if (loading == false)
     return (
-      <div className="flex flex-col w-1/2 mx-auto text-lg text-xs sm:text-base">
+      <div className="flex flex-col w-1/2 mx-auto">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

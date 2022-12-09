@@ -20,7 +20,7 @@ export default function LandingPage() {
   Axios.defaults.withCredentials = true;
 
   const start = () => {
-    Axios.get("http://localhost:3001/login").then((response) => {
+    Axios.get("http://api.rocketpicks.xyz/login").then((response) => {
       if (response.data.loggedIn == true) {
         Router.push("/picks");
       } else {
@@ -30,7 +30,7 @@ export default function LandingPage() {
   };
 
   const login = () => {
-    Axios.get("http://localhost:3001/login").then((response) => {
+    Axios.get("http://api.rocketpicks.xyz/login").then((response) => {
       if (response.data.loggedIn == true) {
         Router.push("/picks");
       } else {
@@ -48,8 +48,7 @@ export default function LandingPage() {
           transition={{ duration: 1 }}
         >
           <button
-            className="bg-blue-600 rounded-lg p-2
-            text-white hover:bg-blue-700 duration-300 block text-center w-24"
+            className="bg-blue-600 rounded-lg p-2 hover:bg-blue-700 duration-300 block text-center w-24"
             onClick={login}
           >
             Login
@@ -102,8 +101,7 @@ export default function LandingPage() {
         transition={{ duration: 1, delay: 1.2 }}
       >
         <button
-          className="bg-blue-600 rounded-lg p-2 mb-4
-            text-white hover:bg-blue-700 duration-300 w-32 flex justify-center text-center mx-auto mt-8"
+          className="bg-blue-600 rounded-lg p-2 mb-4 hover:bg-blue-700 duration-300 w-32 flex justify-center text-center mx-auto mt-8"
           onClick={start}
         >
           Get started

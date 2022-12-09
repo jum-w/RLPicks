@@ -22,6 +22,7 @@ const Picks = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [pickable, setPickable] = useState(false);
 
   const [t1, setT1] = useState("");
   const [t2, setT2] = useState("");
@@ -33,13 +34,14 @@ const Picks = () => {
   const [t8, setT8] = useState("");
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/login").then((response) => {
-      if (response.data.loggedIn == true) {
+    Axios.get("http://api.rocketpicks.xyz/login").then((response) => {
+      if (response.data.loggedIn === true) {
         setName(response.data.user[0].username);
       }
     });
 
-    Axios.get("http://localhost:3001/teams").then((response) => {
+    Axios.get("http://api.rocketpicks.xyz/teams").then((response) => {
+      console.log(response);
       if (response.data[0] !== undefined) {
         setT1(response.data[0].team1);
         setT2(response.data[0].team2);
@@ -49,14 +51,17 @@ const Picks = () => {
         setT6(response.data[0].team6);
         setT7(response.data[0].team7);
         setT8(response.data[0].team8);
+        setPickable(true);
       }
     });
+
+    setLoading(false);
   }, []);
 
-  Axios.post("http://localhost:3001/check", {
+  Axios.post("http://api.rocketpicks.xyz/check", {
     username: name,
   }).then((response) => {
-    if (response.data[0] != undefined && response.data[0].winner1 != null) {
+    if (!response.data[0] && !response.data[0].winner1) {
       setPicked(true);
       setLoading(false);
     } else {
@@ -66,8 +71,8 @@ const Picks = () => {
 
   const submitScores = (e) => {
     e.preventDefault();
-    if (!winner.length == 0) {
-      Axios.post("http://localhost:3001/results", {
+    if (winner.length) {
+      Axios.post("http://api.rocketpicks.xyz/results", {
         username: name,
         score1: w1,
         score2: w2,
@@ -86,11 +91,9 @@ const Picks = () => {
     }
   };
 
-  const close = () => {
-    setVisible(false);
-  };
+  const close = () => setVisible(false);
 
-  if (picked == false && loading == false)
+  if (picked == false && loading == false && pickable == false)
     return (
       <div className="mx-auto">
         <motion.div
@@ -98,7 +101,7 @@ const Picks = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="text-center my-12">
+          <div className="text-center my-12 mx-4">
             <h1 className="text-4xl font-bold">The Teams</h1>
 
             <div className="mt-4">
@@ -113,7 +116,7 @@ const Picks = () => {
         </motion.div>
         <div className="flex justify-center mx-auto">
           <div className="flex 2xl:flex-row flex-col h-max items-center">
-            <div className="text-lg w-80 justify-between flex flex-col p-5">
+            <div className="text-lg w-80 justify-between flex flex-col p-5 disabled">
               <motion.div
                 initial={{ opacity: 0, x: -150 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -310,7 +313,7 @@ const Picks = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="mt-8 w-64 mx-auto bg-red-600 p-3 items-center rounded-lg text-white text-center justify-center flex flex-col">
+            <div className="mt-8 w-64  mb-4 mx-auto bg-red-600 p-3 items-center rounded-lg text-white text-center justify-center flex flex-col">
               <div className="flex">Your picks are invalid! Try again.</div>
             </div>
           </motion.div>
@@ -318,7 +321,7 @@ const Picks = () => {
         <Popup visible={visible} close={close} submitScores={submitScores} />
       </div>
     );
-  else if (loading == false && picked == true)
+  else if (loading == false && picked == true && pickable == true)
     return (
       <Picked
         name={name}
@@ -332,6 +335,26 @@ const Picks = () => {
         t8={t8}
       />
     );
+  else if (loading == false && pickable == false) {
+    return (
+      <div className="text-center my-12 mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1 }}
+        >
+          <h1 className="text-4xl font-bold">The Teams</h1>
+
+          <div className="mt-4">
+            This is where you will be able to choose your teams.
+          </div>
+          <div className="mt-2">
+            The top 8 have not yet been decided, come back soon!
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 };
 
 Picks.getLayout = function getLayout(page) {

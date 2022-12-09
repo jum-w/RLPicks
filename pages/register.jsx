@@ -5,6 +5,8 @@ import {
   faXmarkCircle,
   faCircleInfo,
   faCircleCheck,
+  faUser,
+  faKey,
 } from "@fortawesome/free-solid-svg-icons";
 import rocket from "./components/rocket.png";
 import Image from "next/image";
@@ -30,7 +32,7 @@ export default function Register({ loggedIn }) {
       setSuccess(false);
       setErrMsg("Password is invalid.");
     } else {
-      Axios.post("http://localhost:3001/create", {
+      Axios.post("http://api.rocketpicks.xyz/create", {
         username: username,
         password: password,
       }).then((response) => {
@@ -65,14 +67,27 @@ export default function Register({ loggedIn }) {
             </h5>
             <div className="pb-1 text-gray-300">
               <label className="block pb-2">Username</label>
-              <input
-                className="w-full bg-lighter2 rounded-lg p-2 border border-gray-600 focus:border-blue-500 focus:outline-none"
-                type="text"
-                placeholder="Name"
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                }}
-              />
+              <div
+                className={`flex justify-center items-center border rounded-lg border-gray-600 text-gray-400 ${
+                  (username.length < 3 && username.length != 0) ||
+                  username.length > 12
+                    ? "border-red-700"
+                    : "border-gray-600"
+                }`}
+              >
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className="text-center justify-center items-center ml-3 mr-1"
+                />
+                <input
+                  className="w-full bg-lighter2 p-2 focus:outline-none rounded-lg"
+                  type="text"
+                  placeholder="John..."
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                  }}
+                />
+              </div>
             </div>
             <div className="flex text-sm items-center mx-2 text-gray-500 pb-3">
               <FontAwesomeIcon icon={faCircleInfo} className="pr-1" />
@@ -80,14 +95,27 @@ export default function Register({ loggedIn }) {
             </div>
             <div className="text-gray-300 pb-1">
               <label className="block pb-2">Password</label>
-              <input
-                className="w-full bg-lighter2 rounded-lg p-2 border border-gray-600 focus:border-blue-500 focus:outline-none"
-                type="password"
-                placeholder="••••••••"
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
+              <div
+                className={`flex justify-center items-center border rounded-lg text-gray-400 ${
+                  (password.length < 8 && password.length != 0) ||
+                  password.length > 24
+                    ? "border-red-700"
+                    : "border-gray-600"
+                }`}
+              >
+                <FontAwesomeIcon
+                  icon={faKey}
+                  className="text-center justify-center items-center ml-3 mr-1"
+                />
+                <input
+                  className="w-full bg-lighter2 p-2 focus:outline-none rounded-lg"
+                  type="password"
+                  placeholder="••••••••"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+              </div>
             </div>
             <div className="flex text-sm items-center mx-2 text-gray-500">
               <FontAwesomeIcon icon={faCircleInfo} className="pr-1" />
@@ -95,7 +123,7 @@ export default function Register({ loggedIn }) {
             </div>
             <a
               href="/login"
-              className="flex justify-end mt-1 text-sm text-blue-600 hover:text-blue-500 duration-300 underline"
+              className="flex w-max mt-2 text-sm text-blue-600 hover:text-blue-500 duration-300 underline"
             >
               Already have an account?
             </a>
@@ -104,7 +132,7 @@ export default function Register({ loggedIn }) {
             text-white hover:bg-blue-700 duration-300 block text-center"
               onClick={addUser}
             >
-              Register
+              Create Account
             </button>
           </form>
         </div>
@@ -114,7 +142,7 @@ export default function Register({ loggedIn }) {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            <div className="mt-5 bg-red-600 p-4 rounded-lg text-white text-center justify-center flex">
+            <div className="mt-5 bg-red-600 p-4 rounded-lg text-center text-white justify-center flex">
               <FontAwesomeIcon icon={faXmarkCircle} className="text-2xl mr-2" />
               {errMsg}
             </div>

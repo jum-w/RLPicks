@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import Axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faXmarkCircle,
+  faUser,
+  faKey,
+} from "@fortawesome/free-solid-svg-icons";
 import Router from "next/router";
 import { motion } from "framer-motion";
+import rocket from "./components/rocket.png";
+import Image from "next/image";
 
 export default function Home() {
   const [username, setUsername] = useState("");
@@ -15,7 +21,7 @@ export default function Home() {
   Axios.defaults.withCredentials = true;
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/login").then((response) => {
+    Axios.get("api.rocketpicks.xyz/login").then((response) => {
       if (response.data.loggedIn == true) {
         setLoggedIn(true);
         Router.push("/picks");
@@ -32,7 +38,8 @@ export default function Home() {
       setErrMsg("Invalid username/password.");
       return;
     }
-    Axios.post("http://localhost:3001/login", {
+    Axios.post("api.rocketpicks.xyz/login", {
+      crossDomain: true,
       username: username,
       password: password,
     }).then((response) => {
@@ -55,33 +62,50 @@ export default function Home() {
       >
         <div className="min-h-screen flex flex-col justify-center items-center">
           <div className="p-4 w-full max-w-sm rounded-lg border:none shadow-md bg-lighter2">
+            <div className="text-center">
+              <Image src={rocket} width={50} height={50} />
+            </div>
             <form className="p-3">
-              <h5 className="text-white text-center text-xl pb-5">Login</h5>
-              <div className="pb-3 text-gray-300">
+              <h5 className="text-white text-center text-xl pb-8">
+                Login to your account
+              </h5>
+              <div className="pb-1 text-gray-300">
                 <label className="block pb-2">Username</label>
-                <input
-                  className="w-full bg-lighter2 rounded-lg p-2 border border-gray-600 focus:border-blue-500 focus:outline-none"
-                  type="text"
-                  placeholder="Name"
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                  }}
-                />
+                <div className="flex justify-center items-center border rounded-lg border-gray-600 text-gray-400">
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    className="text-center justify-center items-center ml-3 mr-1"
+                  />
+                  <input
+                    className="w-full bg-lighter2 p-2 focus:outline-none rounded-lg"
+                    type="text"
+                    placeholder="John..."
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
+                  />
+                </div>
               </div>
               <div className="pt-3 text-gray-300">
                 <label className="block pb-2">Password</label>
-                <input
-                  className="w-full bg-lighter2 rounded-lg p-2 border border-gray-600 focus:border-blue-500 focus:outline-none"
-                  type="password"
-                  placeholder="••••••••"
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                />
+                <div className="flex justify-center items-center border rounded-lg border-gray-600 text-gray-400">
+                  <FontAwesomeIcon
+                    icon={faKey}
+                    className="text-center justify-center items-center ml-3 mr-1"
+                  />
+                  <input
+                    className="w-full bg-lighter2 p-2 focus:outline-none rounded-lg"
+                    type="password"
+                    placeholder="••••••••"
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                  />
+                </div>
               </div>
               <a
                 href="/register"
-                className="flex justify-end mt-1 text-sm text-blue-600 hover:text-blue-500 duration-300 underline"
+                className="flex justify-end mt-2 text-sm w-max text-blue-600 hover:text-blue-500 duration-300 underline"
               >
                 Don't have an account?
               </a>
