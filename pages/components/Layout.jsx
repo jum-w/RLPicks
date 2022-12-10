@@ -17,7 +17,9 @@ const Layout = ({ children }) => {
   };
 
   useEffect(() => {
-    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/login", {
+      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+    }).then((response) => {
       if (response.data.loggedIn == true) {
         setName(response.data.user[0].username);
         setLoading(false);

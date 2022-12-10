@@ -34,13 +34,17 @@ const Picks = () => {
   const [t8, setT8] = useState("");
 
   useEffect(() => {
-    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/login", {
+      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+    }).then((response) => {
       if (response.data.loggedIn === true) {
         setName(response.data.user[0].username);
       }
     });
 
-    Axios.get("https://api.rocketpicks.xyz/teams").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/teams", {
+      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+    }).then((response) => {
       console.log(response);
       if (response.data[0] !== undefined) {
         setT1(response.data[0].team1);
@@ -59,6 +63,7 @@ const Picks = () => {
   }, []);
 
   Axios.post("https://api.rocketpicks.xyz/check", {
+    headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
     username: name,
   }).then((response) => {
     if (!response.data[0] && !response.data[0].winner1) {
@@ -73,6 +78,7 @@ const Picks = () => {
     e.preventDefault();
     if (winner.length) {
       Axios.post("https://api.rocketpicks.xyz/results", {
+        headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
         username: name,
         score1: w1,
         score2: w2,

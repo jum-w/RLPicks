@@ -21,7 +21,9 @@ export default function Home() {
   Axios.defaults.withCredentials = true;
 
   useEffect(() => {
-    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/login", {
+      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+    }).then((response) => {
       if (response.data.loggedIn == true) {
         setLoggedIn(true);
         Router.push("/picks");
@@ -39,7 +41,7 @@ export default function Home() {
       return;
     }
     Axios.post("https://api.rocketpicks.xyz/login", {
-      crossDomain: true,
+      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
       username: username,
       password: password,
     }).then((response) => {

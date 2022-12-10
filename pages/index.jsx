@@ -20,7 +20,9 @@ export default function LandingPage() {
   Axios.defaults.withCredentials = true;
 
   const start = () => {
-    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/login", {
+      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+    }).then((response) => {
       if (response.data.loggedIn == true) {
         Router.push("/picks");
       } else {
@@ -30,7 +32,9 @@ export default function LandingPage() {
   };
 
   const login = () => {
-    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/login", {
+      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+    }).then((response) => {
       if (response.data.loggedIn == true) {
         Router.push("/picks");
       } else {

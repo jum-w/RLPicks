@@ -13,13 +13,17 @@ const Leaderboard = () => {
   const [message, setMessage] = useState("");
 
   const getData = () => {
-    Axios.get("https://api.rocketpicks.xyz/names").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/names", {
+      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+    }).then((response) => {
       if (response) {
         setScores(response.data);
       }
     });
 
-    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/login", {
+      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+    }).then((response) => {
       if (response.data.loggedIn == true) {
         setName(response.data.user[0].username);
         setPoints(response.data.user[0].points);
