@@ -14,7 +14,7 @@ const Leaderboard = () => {
 
   const getData = () => {
     Axios.get("https://api.rocketpicks.xyz/names", {
-      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+      headers: { "Access-Control-Allow-Origin": true },
     }).then((response) => {
       if (response) {
         setScores(response.data);
@@ -22,7 +22,7 @@ const Leaderboard = () => {
     });
 
     Axios.get("https://api.rocketpicks.xyz/login", {
-      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+      headers: { "Access-Control-Allow-Origin": true },
     }).then((response) => {
       if (response.data.loggedIn == true) {
         setName(response.data.user[0].username);

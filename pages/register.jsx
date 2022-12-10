@@ -33,7 +33,7 @@ export default function Register({ loggedIn }) {
       setErrMsg("Password is invalid.");
     } else {
       Axios.post("https://api.rocketpicks.xyz/create", {
-        headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+        headers: { "Access-Control-Allow-Origin": true },
         username: username,
         password: password,
       }).then((response) => {

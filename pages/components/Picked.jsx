@@ -16,7 +16,7 @@ const Picked = ({ name, t1, t2, t3, t4, t5, t6, t7, t8, picked }) => {
 
   useEffect(() => {
     Axios.post("https://api.rocketpicks.xyz/teams", {
-      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+      headers: { "Access-Control-Allow-Origin": true },
       username: name,
     }).then((response) => {
       if (response.data[0] !== undefined) {

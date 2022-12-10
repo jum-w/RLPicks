@@ -21,7 +21,7 @@ export default function LandingPage() {
 
   const start = () => {
     Axios.get("https://api.rocketpicks.xyz/login", {
-      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+      headers: { "Access-Control-Allow-Origin": true },
     }).then((response) => {
       if (response.data.loggedIn == true) {
         Router.push("/picks");
@@ -33,7 +33,7 @@ export default function LandingPage() {
 
   const login = () => {
     Axios.get("https://api.rocketpicks.xyz/login", {
-      headers: "Access-Control-Allow-Origin: https://api.rocketpicks.xyz",
+      headers: { "Access-Control-Allow-Origin": true },
     }).then((response) => {
       if (response.data.loggedIn == true) {
         Router.push("/picks");
