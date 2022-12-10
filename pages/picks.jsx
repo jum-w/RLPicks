@@ -73,12 +73,6 @@ const Picks = () => {
   }, []);
 
   Axios.post("https://api.rocketpicks.xyz/check", {
-    headers: {
-      "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz/check",
-      "Access-Control-Allow-Methods": "GET, POST",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      "Access-Control-Max-Age": 86400,
-    },
     username: name,
   }).then((response) => {
     if (!response.data[0] && !response.data[0].winner1) {
@@ -93,12 +87,6 @@ const Picks = () => {
     e.preventDefault();
     if (winner.length) {
       Axios.post("https://api.rocketpicks.xyz/results", {
-        headers: {
-          "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz/results",
-          "Access-Control-Allow-Methods": "GET, POST",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
-          "Access-Control-Max-Age": 86400,
-        },
         username: name,
         score1: w1,
         score2: w2,

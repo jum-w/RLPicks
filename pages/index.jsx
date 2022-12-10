@@ -37,14 +37,7 @@ export default function LandingPage() {
   };
 
   const login = () => {
-    Axios.get("https://api.rocketpicks.xyz/login", {
-      headers: {
-        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz/login",
-        "Access-Control-Allow-Methods": "GET, POST",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Access-Control-Max-Age": 86400,
-      },
-    }).then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
       if (response.data.loggedIn == true) {
         Router.push("/picks");
       } else {
