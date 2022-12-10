@@ -36,7 +36,7 @@ const Picks = () => {
   useEffect(() => {
     Axios.get("https://api.rocketpicks.xyz/login", {
       headers: {
-        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz/login",
         "Access-Control-Allow-Methods": "GET, POST",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
         "Access-Control-Max-Age": 86400,
@@ -49,7 +49,7 @@ const Picks = () => {
 
     Axios.get("https://api.rocketpicks.xyz/teams", {
       headers: {
-        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz/teams",
         "Access-Control-Allow-Methods": "GET, POST",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
         "Access-Control-Max-Age": 86400,
@@ -74,7 +74,7 @@ const Picks = () => {
 
   Axios.post("https://api.rocketpicks.xyz/check", {
     headers: {
-      "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+      "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz/check",
       "Access-Control-Allow-Methods": "GET, POST",
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
       "Access-Control-Max-Age": 86400,
@@ -94,7 +94,7 @@ const Picks = () => {
     if (winner.length) {
       Axios.post("https://api.rocketpicks.xyz/results", {
         headers: {
-          "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+          "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz/results",
           "Access-Control-Allow-Methods": "GET, POST",
           "Access-Control-Allow-Headers": "Content-Type, Authorization",
           "Access-Control-Max-Age": 86400,
