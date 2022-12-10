@@ -35,7 +35,12 @@ const Picks = () => {
 
   useEffect(() => {
     Axios.get("https://api.rocketpicks.xyz/login", {
-      headers: { "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz" },
+      headers: {
+        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+        "Access-Control-Allow-Methods": "GET, POST",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Max-Age": 86400,
+      },
     }).then((response) => {
       if (response.data.loggedIn === true) {
         setName(response.data.user[0].username);
@@ -43,7 +48,12 @@ const Picks = () => {
     });
 
     Axios.get("https://api.rocketpicks.xyz/teams", {
-      headers: { "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz" },
+      headers: {
+        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+        "Access-Control-Allow-Methods": "GET, POST",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Max-Age": 86400,
+      },
     }).then((response) => {
       console.log(response);
       if (response.data[0] !== undefined) {
@@ -63,7 +73,12 @@ const Picks = () => {
   }, []);
 
   Axios.post("https://api.rocketpicks.xyz/check", {
-    headers: { "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz" },
+    headers: {
+      "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+      "Access-Control-Allow-Methods": "GET, POST",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Max-Age": 86400,
+    },
     username: name,
   }).then((response) => {
     if (!response.data[0] && !response.data[0].winner1) {
@@ -80,6 +95,9 @@ const Picks = () => {
       Axios.post("https://api.rocketpicks.xyz/results", {
         headers: {
           "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+          "Access-Control-Allow-Methods": "GET, POST",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Max-Age": 86400,
         },
         username: name,
         score1: w1,

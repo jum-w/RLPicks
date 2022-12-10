@@ -35,6 +35,9 @@ export default function Register({ loggedIn }) {
       Axios.post("https://api.rocketpicks.xyz/create", {
         headers: {
           "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+          "Access-Control-Allow-Methods": "GET, POST",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Max-Age": 86400,
         },
         username: username,
         password: password,

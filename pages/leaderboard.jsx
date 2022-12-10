@@ -14,7 +14,12 @@ const Leaderboard = () => {
 
   const getData = () => {
     Axios.get("https://api.rocketpicks.xyz/names", {
-      headers: { "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz" },
+      headers: {
+        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+        "Access-Control-Allow-Methods": "GET, POST",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Max-Age": 86400,
+      },
     }).then((response) => {
       if (response) {
         setScores(response.data);
@@ -22,7 +27,12 @@ const Leaderboard = () => {
     });
 
     Axios.get("https://api.rocketpicks.xyz/login", {
-      headers: { "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz" },
+      headers: {
+        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+        "Access-Control-Allow-Methods": "GET, POST",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Max-Age": 86400,
+      },
     }).then((response) => {
       if (response.data.loggedIn == true) {
         setName(response.data.user[0].username);

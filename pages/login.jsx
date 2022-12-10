@@ -22,7 +22,12 @@ export default function Home() {
 
   useEffect(() => {
     Axios.get("https://api.rocketpicks.xyz/login", {
-      headers: { "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz" },
+      headers: {
+        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+        "Access-Control-Allow-Methods": "GET, POST",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Max-Age": 86400,
+      },
     }).then((response) => {
       if (response.data.loggedIn == true) {
         setLoggedIn(true);
@@ -41,7 +46,12 @@ export default function Home() {
       return;
     }
     Axios.post("https://api.rocketpicks.xyz/login", {
-      headers: { "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz" },
+      headers: {
+        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz",
+        "Access-Control-Allow-Methods": "GET, POST",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Max-Age": 86400,
+      },
       username: username,
       password: password,
     }).then((response) => {
