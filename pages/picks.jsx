@@ -34,28 +34,13 @@ const Picks = () => {
   const [t8, setT8] = useState("");
 
   useEffect(() => {
-    Axios.get("https://api.rocketpicks.xyz/login", {
-      headers: {
-        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz/login",
-        "Access-Control-Allow-Methods": "GET, POST",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Access-Control-Max-Age": 86400,
-      },
-    }).then((response) => {
+    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
       if (response.data.loggedIn === true) {
         setName(response.data.user[0].username);
       }
     });
 
-    Axios.get("https://api.rocketpicks.xyz/teams", {
-      headers: {
-        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz/teams",
-        "Access-Control-Allow-Methods": "GET, POST",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Access-Control-Max-Age": 86400,
-      },
-    }).then((response) => {
-      console.log(response);
+    Axios.get("https://api.rocketpicks.xyz/teams").then((response) => {
       if (response.data[0] !== undefined) {
         setT1(response.data[0].team1);
         setT2(response.data[0].team2);
@@ -107,7 +92,7 @@ const Picks = () => {
 
   const close = () => setVisible(false);
 
-  if (picked == false && loading == false && pickable == false)
+  if (picked == false && loading == false && pickable == true)
     return (
       <div className="mx-auto">
         <motion.div
