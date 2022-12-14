@@ -5,26 +5,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy, faStar } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import Rocket from "./rocket.png";
+import axios from "axios";
 
 const Layout = ({ children }) => {
   Axios.defaults.withCredentials = true;
 
-  const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const route = (url) => {
-    Router.push(url);
+  const route = (url) => Router.push(url);
+
+  const getData = async () => {
+    try {
+      const response = await axios.get("https://api.rocketpicks.xyz/login");
+      if (response.data.loggedIn) {
+        setLoading(false);
+      } else {
+        Router.push("/login");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
-      if (response.data.loggedIn == true) {
-        setName(response.data.user[0].username);
-        setLoading(false);
-      } else {
-        Router.push("login");
-      }
-    });
+    getData();
   }, []);
 
   if (loading == false)

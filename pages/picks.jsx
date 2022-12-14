@@ -5,6 +5,7 @@ import Teams from "./components/Teams";
 import Picked from "./components/Picked";
 import Popup from "./components/Popup";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const Picks = () => {
   Axios.defaults.withCredentials = true;
@@ -24,75 +25,107 @@ const Picks = () => {
   const [visible, setVisible] = useState(false);
   const [pickable, setPickable] = useState(false);
 
-  const [t1, setT1] = useState("");
-  const [t2, setT2] = useState("");
-  const [t3, setT3] = useState("");
-  const [t4, setT4] = useState("");
-  const [t5, setT5] = useState("");
-  const [t6, setT6] = useState("");
-  const [t7, setT7] = useState("");
-  const [t8, setT8] = useState("");
+  const [team1, setTeam1] = useState("");
+  const [team2, setTeam2] = useState("");
+  const [team3, setTeam3] = useState("");
+  const [team4, setTeam4] = useState("");
+  const [team5, setTeam5] = useState("");
+  const [team6, setTeam6] = useState("");
+  const [team7, setTeam7] = useState("");
+  const [team8, setTeam8] = useState("");
+
+  const getUser = async () => {
+    try {
+      const response = await axios.get("https://api.rocketpicks.xyz/login");
+      setName(response.data.user[0].username);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTeams = async () => {
+    try {
+      const response = await axios.get("https://api.rocketpicks.xyz/teams");
+      if (!response.data[0]) {
+        setPickable(false);
+        return;
+      }
+      setPickable(true);
+      const { team1, team2, team3, team4, team5, team6, team7, team8 } =
+        response.data[0];
+      setTeam1(team1);
+      setTeam2(team2);
+      setTeam3(team3);
+      setTeam4(team4);
+      setTeam5(team5);
+      setTeam6(team6);
+      setTeam7(team7);
+      setTeam8(team8);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const checkTeams = async () => {
+    try {
+      const response = await axios.post("https://api.rocketpicks.xyz/check", {
+        username: name,
+      });
+      response.data[0].winner1 ? setPicked(true) : setPicked(false);
+    } catch (error) {}
+  };
 
   useEffect(() => {
-    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
-      if (response.data.loggedIn === true) {
-        setName(response.data.user[0].username);
-      }
-    });
-
-    Axios.get("https://api.rocketpicks.xyz/teams").then((response) => {
-      if (response.data[0] !== undefined) {
-        setT1(response.data[0].team1);
-        setT2(response.data[0].team2);
-        setT3(response.data[0].team3);
-        setT4(response.data[0].team4);
-        setT5(response.data[0].team5);
-        setT6(response.data[0].team6);
-        setT7(response.data[0].team7);
-        setT8(response.data[0].team8);
-        setPickable(true);
-      }
-    });
-
+    getUser();
+    checkTeams();
+    getTeams();
     setLoading(false);
-  }, []);
-
-  Axios.post("https://api.rocketpicks.xyz/check", {
-    username: name,
-  }).then((response) => {
-    if (!response.data[0] && !response.data[0].winner1) {
-      setPicked(true);
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
   });
 
-  const submitScores = (e) => {
+  const submitScores = async (e) => {
     e.preventDefault();
     if (winner.length) {
-      Axios.post("https://api.rocketpicks.xyz/results", {
-        username: name,
-        score1: w1,
-        score2: w2,
-        score3: w3,
-        score4: w4,
-        score5: w5,
-        score6: w6,
-        score7: winner,
-      }).then((response) => {
-        if (response) {
-          setPicked(true);
-        }
-      });
+      try {
+        const response = axios.post("https://api.rocketpicks.xyz/results", {
+          username: name,
+          score1: w1,
+          score2: w2,
+          score3: w3,
+          score4: w4,
+          score5: w5,
+          score6: w6,
+          score7: winner,
+        });
+
+        response ? setPicked(true) : setPicked(false);
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       setError(true);
     }
   };
 
+  const checkPicks = () => {
+    if (
+      !w1.length ||
+      !w2.length ||
+      !w3.length ||
+      !w4.length ||
+      !w5.length ||
+      !w6.length ||
+      !winner.length
+    ) {
+      setError(true);
+    } else {
+      setError(false);
+      setVisible(true);
+    }
+  };
+
   const close = () => setVisible(false);
 
-  if (picked == false && loading == false && pickable == true)
+  if (picked === false && loading === false && pickable === true)
     return (
       <div className="mx-auto">
         <motion.div
@@ -126,65 +159,73 @@ const Picks = () => {
                 <div className="mb-8">
                   <div
                     onClick={() => {
-                      setW1(t1);
+                      w5 === team2 ? setW5("") : setW5(w5);
+                      setW1(team1);
                     }}
                   >
-                    <Teams t1={t1} />
+                    <Teams team1={team1} />
                   </div>
                   <div
                     onClick={() => {
-                      setW1(t2);
+                      w5 === team1 ? setW5("") : setW5(w5);
+                      setW1(team2);
                     }}
                   >
-                    <Teams t1={t2} />
-                  </div>
-                </div>
-                <div className="mb-8">
-                  <div
-                    onClick={() => {
-                      setW2(t3);
-                    }}
-                  >
-                    <Teams t1={t3} />
-                  </div>
-                  <div
-                    onClick={() => {
-                      setW2(t4);
-                    }}
-                  >
-                    <Teams t1={t4} />
+                    <Teams team1={team2} />
                   </div>
                 </div>
                 <div className="mb-8">
                   <div
                     onClick={() => {
-                      setW3(t5);
+                      w5 === team4 ? setW5("") : setW5(w5);
+                      setW2(team3);
                     }}
                   >
-                    <Teams t1={t5} />
+                    <Teams team1={team3} />
                   </div>
                   <div
                     onClick={() => {
-                      setW3(t6);
+                      w5 === team3 ? setW5("") : setW5(w5);
+                      setW2(team4);
                     }}
                   >
-                    <Teams t1={t6} />
+                    <Teams team1={team4} />
+                  </div>
+                </div>
+                <div className="mb-8">
+                  <div
+                    onClick={() => {
+                      w6 === team6 ? setW6("") : setW6(w6);
+                      setW3(team5);
+                    }}
+                  >
+                    <Teams team1={team5} />
+                  </div>
+                  <div
+                    onClick={() => {
+                      w6 === team5 ? setW6("") : setW6(w6);
+                      setW3(team6);
+                    }}
+                  >
+                    <Teams team1={team6} />
                   </div>
                 </div>
                 <div className="">
                   <div
                     onClick={() => {
-                      setW4(t7);
+                      w6 === team8 ? setW6("") : setW6(w6);
+                      setW4(team7);
                     }}
                   >
-                    <Teams t1={t7} />
+                    <Teams team1={team7} />
                   </div>
                   <div
                     onClick={() => {
-                      setW4(t8);
+                      w6 === team7 ? setW6("") : setW6(w6);
+                      setW4(team8);
                     }}
                   >
-                    <Teams t1={t8} />
+                    <Teams team1={team8} />
                   </div>
                 </div>
               </motion.div>
@@ -206,7 +247,7 @@ const Picks = () => {
                       setW5(w1);
                     }}
                   >
-                    <Teams t1={w1} />
+                    <Teams team1={w1} />
                   </div>
                   <div
                     onClick={() => {
@@ -216,7 +257,7 @@ const Picks = () => {
                       setW5(w2);
                     }}
                   >
-                    <Teams t1={w2} />
+                    <Teams team1={w2} />
                   </div>
                 </div>
                 <div>
@@ -228,7 +269,7 @@ const Picks = () => {
                       setW6(w3);
                     }}
                   >
-                    <Teams t1={w3} />
+                    <Teams team1={w3} />
                   </div>
                   <div
                     onClick={() => {
@@ -238,7 +279,7 @@ const Picks = () => {
                       setW6(w4);
                     }}
                   >
-                    <Teams t1={w4} />
+                    <Teams team1={w4} />
                   </div>
                 </div>
               </motion.div>
@@ -257,14 +298,14 @@ const Picks = () => {
                       setWinner(w5);
                     }}
                   >
-                    <Teams t1={w5} />
+                    <Teams team1={w5} />
                   </div>
                   <div
                     onClick={() => {
                       setWinner(w6);
                     }}
                   >
-                    <Teams t1={w6} />
+                    <Teams team1={w6} />
                   </div>
                 </div>
               </motion.div>
@@ -279,7 +320,7 @@ const Picks = () => {
                 {/* Winner */}
                 <div>
                   <div>
-                    <Teams t1={winner} />
+                    <Teams team1={winner} />
                   </div>
                 </div>
               </motion.div>
@@ -294,14 +335,7 @@ const Picks = () => {
           <button
             className="bg-blue-600 rounded-lg p-3 mb-4
             text-white hover:bg-blue-700 duration-300 w-48 flex justify-center text-center mx-auto mt-8"
-            onClick={() => {
-              if (winner.length == 0) {
-                setError(true);
-              } else {
-                setError(false);
-                setVisible(true);
-              }
-            }}
+            onClick={checkPicks}
           >
             Confirm Picks
           </button>
@@ -312,29 +346,29 @@ const Picks = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="mt-8 w-64  mb-4 mx-auto bg-red-600 p-3 items-center rounded-lg text-white text-center justify-center flex flex-col">
-              <div className="flex">Your picks are invalid! Try again.</div>
+            <div className="mt-8 w-72 mb-4 mx-auto bg-red-600 p-3 items-center rounded-lg text-white text-center justify-center flex flex-col">
+              <div className="flex">You haven't completed your picks!</div>
             </div>
           </motion.div>
         )}
         <Popup visible={visible} close={close} submitScores={submitScores} />
       </div>
     );
-  else if (loading == false && picked == true && pickable == true)
+  else if (loading === false && picked === true)
     return (
       <Picked
         name={name}
-        t1={t1}
-        t2={t2}
-        t3={t3}
-        t4={t4}
-        t5={t5}
-        t6={t6}
-        t7={t7}
-        t8={t8}
+        team1={team1}
+        team2={team2}
+        team3={team3}
+        team4={team4}
+        team5={team5}
+        team6={team6}
+        team7={team7}
+        team8={team8}
       />
     );
-  else if (loading == false && pickable == false) {
+  else if (loading === false && pickable === false && picked === false) {
     return (
       <div className="text-center my-12 mx-auto px-4">
         <motion.div

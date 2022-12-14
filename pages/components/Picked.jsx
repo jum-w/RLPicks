@@ -2,8 +2,19 @@ import Axios from "axios";
 import { useEffect, useState } from "react";
 import Teams from "./Teams";
 import { motion } from "framer-motion";
+import axios from "axios";
 
-const Picked = ({ name, t1, t2, t3, t4, t5, t6, t7, t8, picked }) => {
+const Picked = ({
+  name,
+  team1,
+  team2,
+  team3,
+  team4,
+  team5,
+  team6,
+  team7,
+  team8,
+}) => {
   Axios.defaults.withCredentials = true;
 
   const [w1, setW1] = useState("");
@@ -14,20 +25,26 @@ const Picked = ({ name, t1, t2, t3, t4, t5, t6, t7, t8, picked }) => {
   const [w6, setW6] = useState("");
   const [w7, setW7] = useState("");
 
+  const setTeams = async () => {
+    try {
+      const response = await axios.post("https://api.rocketpicks.xyz/teams", {
+        username: name,
+      });
+      if (!response.data[0]) return;
+      const { winner1, winner2, winner3, winner4, winner5, winner6, winner7 } =
+        response.data[0];
+      setW1(winner1);
+      setW2(winner2);
+      setW3(winner3);
+      setW4(winner4);
+      setW5(winner5);
+      setW6(winner6);
+      setW7(winner7);
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    Axios.post("https://api.rocketpicks.xyz/teams", {
-      username: name,
-    }).then((response) => {
-      if (response.data[0] !== undefined) {
-        setW1(response.data[0].winner1);
-        setW2(response.data[0].winner2);
-        setW3(response.data[0].winner3);
-        setW4(response.data[0].winner4);
-        setW5(response.data[0].winner5);
-        setW6(response.data[0].winner6);
-        setW7(response.data[0].winner7);
-      }
-    });
+    setTeams();
   });
 
   return (
@@ -58,34 +75,34 @@ const Picked = ({ name, t1, t2, t3, t4, t5, t6, t7, t8, picked }) => {
               {/* Quarter Finals */}
               <div className="mb-8">
                 <div>
-                  <Teams t1={t1} />
+                  <Teams team1={team1} />
                 </div>
                 <div>
-                  <Teams t1={t2} />
-                </div>
-              </div>
-              <div className="mb-8">
-                <div>
-                  <Teams t1={t3} />
-                </div>
-                <div>
-                  <Teams t1={t4} />
+                  <Teams team1={team2} />
                 </div>
               </div>
               <div className="mb-8">
                 <div>
-                  <Teams t1={t5} />
+                  <Teams team1={team3} />
                 </div>
                 <div>
-                  <Teams t1={t6} />
+                  <Teams team1={team4} />
+                </div>
+              </div>
+              <div className="mb-8">
+                <div>
+                  <Teams team1={team5} />
+                </div>
+                <div>
+                  <Teams team1={team6} />
                 </div>
               </div>
               <div className="">
                 <div>
-                  <Teams t1={t7} />
+                  <Teams team1={team7} />
                 </div>
                 <div>
-                  <Teams t1={t8} />
+                  <Teams team1={team8} />
                 </div>
               </div>
             </motion.div>
@@ -100,18 +117,18 @@ const Picked = ({ name, t1, t2, t3, t4, t5, t6, t7, t8, picked }) => {
               {/* Semi Finals */}
               <div className="mb-8">
                 <div>
-                  <Teams t1={w1} />
+                  <Teams team1={w1} />
                 </div>
                 <div>
-                  <Teams t1={w2} />
+                  <Teams team1={w2} />
                 </div>
               </div>
               <div className="">
                 <div>
-                  <Teams t1={w3} />
+                  <Teams team1={w3} />
                 </div>
                 <div>
-                  <Teams t1={w4} />
+                  <Teams team1={w4} />
                 </div>
               </div>
             </motion.div>
@@ -126,10 +143,10 @@ const Picked = ({ name, t1, t2, t3, t4, t5, t6, t7, t8, picked }) => {
               {/* Grand Finals */}
               <div className="">
                 <div>
-                  <Teams t1={w5} />
+                  <Teams team1={w5} />
                 </div>
                 <div>
-                  <Teams t1={w6} />
+                  <Teams team1={w6} />
                 </div>
               </div>
             </motion.div>
@@ -144,7 +161,7 @@ const Picked = ({ name, t1, t2, t3, t4, t5, t6, t7, t8, picked }) => {
               {/* Winner */}
               <div className="">
                 <div>
-                  <Teams t1={w7} />
+                  <Teams team1={w7} />
                 </div>
               </div>
             </motion.div>

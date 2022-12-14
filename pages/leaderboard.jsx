@@ -8,30 +8,17 @@ const Leaderboard = () => {
 
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [name, setName] = useState("");
   const [points, setPoints] = useState(0);
-  const [message, setMessage] = useState("");
 
-  const getData = () => {
-    Axios.get("https://api.rocketpicks.xyz/names", {
-      headers: {
-        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz/names",
-        "Access-Control-Allow-Methods": "GET, POST",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Access-Control-Max-Age": 86400,
-      },
-    }).then((response) => {
-      if (response) {
-        setScores(response.data);
-      }
-    });
-
-    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
-      if (response.data.loggedIn == true) {
-        setName(response.data.user[0].username);
-        setPoints(response.data.user[0].points);
-      }
-    });
+  const getData = async () => {
+    try {
+      const response = await Axios.get("https://api.rocketpicks.xyz/names");
+      const response2 = await Axios.get("https://api.rocketpicks.xyz/login");
+      response ? setScores(response.data) : setScores(null);
+      response2 ? setPoints(response2.data.user[0].points) : setPoints(0);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

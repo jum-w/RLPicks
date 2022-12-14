@@ -10,26 +10,26 @@ import Router from "next/router";
 import { motion } from "framer-motion";
 import rocket from "./components/rocket.png";
 import Image from "next/image";
+import axios from "axios";
 
 export default function Home() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
   const [loading, setLoading] = useState(true);
 
   Axios.defaults.withCredentials = true;
 
+  const getData = async () => {
+    const response = await axios.get("https://api.rocketpicks.xyz/login");
+    response.data.loggedIn ? Router.push("/picks") : setLoading(false);
+  };
+
   useEffect(() => {
-    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
-      if (response.data.loggedIn == true) {
-        setLoggedIn(true);
-        Router.push("/picks");
-      } else setLoading(false);
-    });
+    getData();
   }, []);
 
-  const login = (e) => {
+  const login = async (e) => {
     e.preventDefault();
     if (username.length < 3 || username.length > 12) {
       setErrMsg("Invalid username/password.");
@@ -38,21 +38,24 @@ export default function Home() {
       setErrMsg("Invalid username/password.");
       return;
     }
-    Axios.post("https://api.rocketpicks.xyz/login", {
-      username: username,
-      password: password,
-    }).then((response) => {
-      if (response.data.message == "Login complete.") {
+    try {
+      const response = await axios.post("https://api.rocketpicks.xyz/login", {
+        username: username,
+        password: password,
+      });
+
+      if (response.data.message === "Login complete.") {
         setErrMsg(null);
         Router.push("/picks");
       } else {
         setErrMsg(response.data.message);
-        console.log(response.data.message);
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  if (loggedIn == false && loading == false)
+  if (loading == false)
     return (
       <motion.div
         initial={{ opacity: 0 }}

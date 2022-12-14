@@ -7,6 +7,7 @@ import present from "./components/presentlogo.png";
 import Router from "next/router";
 import Axios from "axios";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const title1 = "Pick your winners";
 const desc1 =
@@ -19,31 +20,13 @@ const desc3 = "Join our discord to earn prizes for your rankings!";
 export default function LandingPage() {
   Axios.defaults.withCredentials = true;
 
-  const start = () => {
-    Axios.get("https://api.rocketpicks.xyz/login", {
-      headers: {
-        "Access-Control-Allow-Origin": "https://api.rocketpicks.xyz/login",
-        "Access-Control-Allow-Methods": "GET, POST",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Access-Control-Max-Age": 86400,
-      },
-    }).then((response) => {
-      if (response.data.loggedIn == true) {
-        Router.push("/picks");
-      } else {
-        Router.push("/register");
-      }
-    });
-  };
-
-  const login = () => {
-    Axios.get("https://api.rocketpicks.xyz/login").then((response) => {
-      if (response.data.loggedIn == true) {
-        Router.push("/picks");
-      } else {
-        Router.push("/login");
-      }
-    });
+  const route = async (url) => {
+    try {
+      const response = await axios.get("https://api.rocketpicks.xyz/login");
+      response.data.loggedIn ? Router.push("/picks") : Router.push(url);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -56,7 +39,9 @@ export default function LandingPage() {
         >
           <button
             className="bg-blue-600 rounded-lg p-2 hover:bg-blue-700 duration-300 block text-center w-24"
-            onClick={login}
+            onClick={() => {
+              route("/login");
+            }}
           >
             Login
           </button>
@@ -109,7 +94,9 @@ export default function LandingPage() {
       >
         <button
           className="bg-blue-600 rounded-lg p-2 mb-4 hover:bg-blue-700 duration-300 w-32 flex justify-center text-center mx-auto mt-8"
-          onClick={start}
+          onClick={() => {
+            route("/register");
+          }}
         >
           Get started
         </button>

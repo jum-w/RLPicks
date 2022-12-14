@@ -11,8 +11,9 @@ import {
 import rocket from "./components/rocket.png";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import axios from "axios";
 
-export default function Register({ loggedIn }) {
+export default function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState(null);
@@ -20,33 +21,36 @@ export default function Register({ loggedIn }) {
 
   const special = /\W|_/g;
 
-  const addUser = (e) => {
+  const addUser = async (e) => {
     e.preventDefault();
     if (username.length < 3 || username.length > 12) {
       setSuccess(false);
       setErrMsg("Username is invalid.");
+      return;
     } else if (special.test(username)) {
       setSuccess(false);
       setErrMsg("Username must be alphanumeric.");
+      return;
     } else if (password.length < 8 || password.length > 24) {
       setSuccess(false);
       setErrMsg("Password is invalid.");
-    } else {
-      Axios.post("https://api.rocketpicks.xyz/create", {
+      return;
+    }
+    try {
+      const response = await axios.post("https://api.rocketpicks.xyz/create", {
         username: username,
         password: password,
-      }).then((response) => {
-        if (
-          response.data.message[0] == "&" ||
-          response.data.message == "Done"
-        ) {
-          setErrMsg(null);
-          setSuccess(true);
-        } else {
-          setSuccess(false);
-          setErrMsg(response.data.message);
-        }
       });
+      console.log(response);
+      if (response.data.message[0] === "&" || response.data.message == "Done") {
+        setErrMsg(null);
+        setSuccess(true);
+      } else {
+        setSuccess(false);
+        setErrMsg(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
