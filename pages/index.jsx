@@ -61,6 +61,7 @@ export default function LandingPage() {
           transition={{ duration: 1 }}
         >
           <h1 className="mt-4">Rocket Picks</h1>
+          <h4 className="mt-4 text-xl">Note: Website will not work due to closing the backend hosting, see here for <a href="https://github.com/jum-w/RLPicks" className="text-blue-500">github</a></h4>
         </motion.div>
       </div>
       <div className="flex flex-col lg:flex-row justify-center p-8">
