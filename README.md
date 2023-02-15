@@ -17,7 +17,7 @@ The website does not work on its own, as I destroyed the droplet for the back en
 * Axios
 * Cors
 * bcrypt
-* Framer js
+* Framer Motion
 * Cloudflare
 * Digital ocean
 * Planetscale 
