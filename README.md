@@ -6,6 +6,8 @@ The website does not work on its own, as I destroyed the droplet for the back en
 
 [demo for the site](https://www.youtube.com/watch?v=DXYstso5gY0)
 
+[backend](https://github.com/jum-w/Rocket-Picks-Backend)
+
 ### Technologies used: 
 * React
 * Next js
